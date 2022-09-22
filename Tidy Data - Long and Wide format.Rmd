@@ -1,0 +1,65 @@
+---
+title: "Tidy Data - Long and Wide format"
+output: html_document
+date: "2022-09-22"
+---
+
+
+
+
+3. Convert data from Wide to Long (and vice versa)
+
+This step is also called data reshaping. 
+Let’s create some data in wide format first.
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+school_wide <- tibble(name = c("Stuart", "Bob", "Kevin"),
+                      math = c(2, 3, 4),
+                      sport = c(3, 1, 2),
+                      art = c(3, 2, 1))
+school_wide
+```
+
+### Convert Wide to Long Format
+
+For the conversion the function pivot_longer() from tidyr package is used.
+
+```{r}
+school_tidy <- pivot_longer(data = school_wide,
+                           cols = 2:4, 
+                           names_to = "subject", 
+                           values_to = "grade")
+school_tidy
+```
+
+It consumes some parameters:
+
+* data: the dataset to convert
+* cols: the columns used for pivoting. You can specify numerical positions like here (2:4) or use functions like starts_with() to select all columns that start with a certain name.
+* names_to: As the name suggests, this is the column holding the keys. So the column names are used in this step and will populate the values in this column.
+* values_to: This defines the column name for the values from our wide format data.
+
+### Convert Long to Wide Format
+
+We make use of function pivot_wider() and store the result in an object called school_wide_reconstructed.
+
+```{r}
+
+school_wide_reconstructed <- pivot_wider(data=school_tidy, 
+                                         id_cols = 'name', 
+                                         names_from = 'subject', 
+                                         values_from = 'grade')
+school_wide_reconstructed
+```
+
+The function requires the following parameters:
+
+* data: a data frame in long (tidy) format
+* id_cols: the name of the columns which will be unchanged in the conversion
+* names_from: the name of the column used to create column names
+* values_from: the name of the column used to extract the values
+
+
