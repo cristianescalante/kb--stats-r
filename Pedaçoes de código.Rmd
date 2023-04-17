@@ -1,0 +1,74 @@
+
+
+
+# Ordenação dos elementos de um gráfico
+	- ordernar os dados com _mutate_
+	- REF: https://twitter.com/chburkhart/status/1646879228384739331
+
+```{r}
+mutate(
+	manufacturer = fct_reorder(as.factor(manufacturer),
+								displ)
+	)
+```	
+	- Dessa forma fica ordenado por algum valor, possivelmente, pelo média.
+	- Acrescentando o argumento ".fun", pode-se escolher por qual valor realizar a
+ordenação.
+
+```{r}
+mutate(
+	manufacturer = fct_reorder(as.factor(manufacturer),
+								displ, .fun = mean)
+	)
+```
+```
+- Uma forma de destacar a ordenação:
+
+```{r}
+mpg |>
+	mutate(
+		manufacturer = fct_reorder(as.factor(manufacturer),
+									displ, .fun = mean)
+		) |>
+	ggplot( aes(x = displ, y = manufacturer)) +
+	geom_box_plot() +
+	stat_summary(geom = point, fun = "max",
+	color - "blue")+
+	stat_summary(geom = line, fun = "max",
+	color - "blue", group = 1) 
+```
+
+	
+
+# Cálculo de estatísticas para muitas variáveis - Cross function
+	- REF: https://twitter.com/ChBurkhart/status/1647243881095000069
+
+```{r}
+mpg |>
+	group_by(manufacturer) |>
+	summarise(
+		across(
+			.cols = c("displ", "cty"), # where(is.numeric),
+			.fns = \(col) mean(col, na.rm - true),
+			.names = "mean_{.col}"
+		)
+	)
+```
+
+	- Alternativamente, pode-se usar o argumento ".by" do summarise
+
+```{r}
+mpg |>
+	summarise(
+		across(
+			.cols = c("displ", "cty"), # where(is.numeric),
+			.fns = \(col) mean(col, na.rm - true),
+			.names = "mean_{.col}"
+		),
+		.by = manufacturer
+	)
+```
+
+# Shortcuts
+
+	- You can go to your global options (Ctrl + , or under Tools) click on "Code" in the sidebar, and select "Use native pipe operator, |> (requires R 4.1+)"

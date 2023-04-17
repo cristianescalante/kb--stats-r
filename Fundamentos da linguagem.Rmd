@@ -1,0 +1,60 @@
+	# Fundamentos da linguagem
+
+	## Indexando listas
+		- REF: https://blog.curso-r.com/posts/2023-04-14-indexacao/
+		l <- list(
+				  objeto = "abc",
+				  vetor = c(1, 2, 3),
+				  lista = list(TRUE, FALSE)
+				)
+
+```{r}
+	l[1]
+	#> $objeto
+	#> [1] "abc"
+	l[[1]]
+	#> [1] "abc"
+	l["objeto"]
+	#> $objeto
+	#> [1] "abc"
+	l[["objeto"]]
+	#> [1] "abc"
+	l$objeto
+	#> [1] "abc"
+
+```
+
+```{r}
+
+	l[2:3]
+	l[c("vetor", "lista")]
+	l[-1]
+	
+	l[[1]]
+	l[["objeto"]]
+	l$objeto
+	
+	l[[3]][1]
+	l[["lista"]][1]
+	l$lista[1]
+	
+	l[[3]][[1]]
+	l[["lista"]][[1]]
+	l$lista[[1]]
+
+```
+
+
+	## Laying out multiple plots on a page
+	- REF: https://cran.r-project.org/web/packages/egg/vignettes/Ecosystem.html
+
+	 - Arranging multiple plots on a page
+```{r}
+library(ggplot2)
+p1 <- qplot(mpg, wt, data = mtcars, colour = cyl)
+p2 <- qplot(mpg, data = mtcars) + ggtitle("title")
+p3 <- qplot(mpg, data = mtcars, geom = "dotplot")
+p4 <-
+  p1 + facet_wrap( ~ carb, nrow = 1) + theme(legend.position = "none") +
+  ggtitle("facetted plot")
+```  
