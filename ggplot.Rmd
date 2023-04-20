@@ -1,0 +1,27 @@
+# ggplot
+
+## Temas 
+	- https://github.com/ricardo-bion/ggtech
+	- https://jrnold.github.io/ggthemes/
+	- Style used by the BBC News data team: https://github.com/bbc/bbplot/
+	- https://ggplot2.tidyverse.org/reference/ggtheme.html
+
+## Preenchimento, exemplo Histograma
+REF: https://r-graphics.org/recipe-distribution-basic-hist
+
+```{r}
+
+# Set the width of each bin to 5 (each bin will span 5 x-axis units)
+ggplot(faithful, aes(x = waiting)) +
+  geom_histogram(binwidth = 5, fill = "white", colour = "black")
+
+# Divide the x range into 15 bins
+binsize <- diff(range(faithful$waiting))/15
+
+ggplot(faithful, aes(x = waiting)) +
+  geom_histogram(binwidth = binsize, fill = "white", colour = "black")
+
+```
+
+
+

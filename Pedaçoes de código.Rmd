@@ -69,6 +69,58 @@ mpg |>
 	)
 ```
 
+# Seccionar dados - slice_max e ordenação
+```{r}
+library(tidyverse)
+library(lubrdate)
+
+economics |>
+	group_by(year = year(date)) |>
+	slice_max(
+		order_by(unemply,
+		n = 1
+	) |>
+	ungroup()
+		
+
+economics |>
+	group_by(year = year(date)) |>
+	slice_max(
+		order_by(unemply,
+		n = 1
+	) |>
+	ungroup() |>
+	mutate(	
+		month = month(date)
+	) |>
+	count()
+```
+
+## Recodificar fatores
+
+```{r}
+cronbach( anes[c("rr1", "rr2", "rr3","rr4")])
+
+tabyl(anes$rr1)
+tabyl(anes$rr4)
+
+
+libra(dplyr)
+
+anes = anes |:
+	mutate_at( c("rr1", "rr4"),
+		funs( recode(
+			.,
+			'1' = 5,
+			'2' = 4,
+			'3' = 3,
+			'4' = 2,
+			'5' = ')))
+
+```
+
+
+
 # Shortcuts
 
 	- You can go to your global options (Ctrl + , or under Tools) click on "Code" in the sidebar, and select "Use native pipe operator, |> (requires R 4.1+)"
