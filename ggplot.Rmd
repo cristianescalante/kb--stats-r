@@ -23,5 +23,46 @@ ggplot(faithful, aes(x = waiting)) +
 
 ```
 
+## Armazenar plots em DF
+You don't HAVE to store your #dataViz as individual files.
+You could dynamically generate plots for some combination of variables and store each #ggplot in a #tidyverse tibble.
+E.g. if you are doing #bioinformatics and you want to plot-for-each-gene
+Ref: https://twitter.com/jessenleon/status/1650564922630107136/
 
+
+``` {r}
+
+my_data <- palmerpenguins::penguins %>%
+	drop_na %>%
+	select( -year) %>%
+	group_by(species, island) %>%
+	nest %>%
+	mutate( 
+		my_plot = map(data, 
+			~ggplot(
+				data = .x,
+				mapping = aes(x = bill_lenght_mm,
+							  y = bill_depth_mm)) +
+			geom_point() +
+			labs( title = str_c(species, ",", island))))
+
+my_data %>%
+	pull(my_plot) %>%
+	patchwork::wrap_plots()
+
+
+
+### Alternativa de alocar os gráficos com uma lista
+Ref: [How to create a list of plot objects and save them as files](https://cmdlinetips.com/2022/06/create-a-list-of-ggplot-objects-and-save-them-as-files/)
+
+
+```{r }
+
+plots <- penguins %>%
+  split(.$species) %>%
+  map(~ggplot(.x, aes(bill_length_mm, bill_depth_mm, color=sex)) + 
+        geom_point()+
+        theme_bw(16))
+
+```
 
